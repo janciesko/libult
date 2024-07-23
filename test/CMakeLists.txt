@@ -16,5 +16,5 @@ SET(NAME LIBULT_TestAll)
 FILE(GLOB TEST_SRCS *.cpp)
 
 add_executable(${NAME} ${TEST_SRCS})
-target_link_libraries(${NAME} PRIVATE libult) 
+target_link_libraries(${NAME} PRIVATE libult)
 target_link_libraries(${NAME} PRIVATE gtest_main)

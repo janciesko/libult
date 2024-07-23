@@ -1,29 +1,27 @@
 cmake_minimum_required(VERSION 3.18)
-project(KokkosMPIConnector LANGUAGES CXX)
+project(libult VERSION 0.1)
 
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 include(CTest)
 
-set (NAME libult)
-
 option(LIBULT_ENABLE_TESTS "Whether to build tests" OFF)
-set(SOURCES)
-set(HEADERS)
-set (SOURCE_DIRS "./src")
+option(LIBULT_ENABLE_PTHREADS "Whether to build with pthreads support" ON)
+option(LIBULT_ENABLE_QTHREADS "Whether to build with Qthreads support" OFF)
+option(LIBULT_ENABLE_ARGOBOTS "Whether to build with Argobots support" OFF)
 
-foreach(DIR ${SOURCE_DIRS})
-  file(GLOB DIR_SRCS ${DIR}/*.cpp)
-  file(GLOB DIR_HDRS ${DIR}/*.hpp)
-  list(APPEND SOURCES ${DIR_SRCS})
-  list(APPEND HEADERS ${DIR_HDRS})
-endforeach()
+add_subdirectory(src)
 
-add_library(${NAME} ${SOURCES} ${HEADERS})
-target_link_libraries(${NAME} PUBLIC ${PUBLIC_DEPS})
+export (
+    TARGETS libult
+    NAMESPACE "${PROJECT_NAME}::"
+    FILE ${PROJECT_BINARY_DIR}/cmake/libult/libultTargets.cmake
+)
 
-IF (LIBULT_ENABLE_TESTS)
-  enable_testing()
-  add_subdirectory(test)
-ENDIF()
+install(
+    TARGETS libult
+    EXPORT LibultTargets # does this do anything?
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
